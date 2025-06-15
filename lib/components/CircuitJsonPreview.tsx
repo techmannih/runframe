@@ -255,6 +255,7 @@ export const CircuitJsonPreview = ({
                         ? "min-h-[calc(100vh-240px)]"
                         : "min-h-[620px]",
                     )}
+                    onEditEvent={(ee) => onEditEvent?.(ee)}
                     // onEditEventsChanged={(editEvents) => {
                     //   if (editEvents.some((editEvent) => editEvent.in_progress))
                     //     return

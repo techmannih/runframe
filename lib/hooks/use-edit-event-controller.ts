@@ -75,12 +75,25 @@ export const useEditEventController = () => {
 
   useEffect(() => {
     if (editEvents.filter((ee) => !ee._applied).length === 0) return
-    const timeout = setTimeout(() => {
+
+    const handleApply = () => {
       markAllEditEventsApplied()
-      applyEditEventsAndUpdateManualEditsJson(
-        editEvents, //.filter((ee) => !ee._applied),
-      )
-    }, 1000)
+      applyEditEventsAndUpdateManualEditsJson(editEvents)
+    }
+
+    const hasFinishedComponentMove = editEvents.some(
+      (ee) =>
+        !ee._applied &&
+        ee.pcb_edit_event_type === "edit_component_location" &&
+        ee.in_progress === false,
+    )
+
+    if (hasFinishedComponentMove) {
+      handleApply()
+      return
+    }
+
+    const timeout = setTimeout(handleApply, 1000)
 
     return () => clearTimeout(timeout)
   }, [editEvents])
