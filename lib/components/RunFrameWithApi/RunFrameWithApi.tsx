@@ -3,7 +3,7 @@ import { useEditEventController } from "lib/hooks/use-edit-event-controller"
 import { useSyncPageTitle } from "lib/hooks/use-sync-page-title"
 import { useEffect, useMemo, useState } from "react"
 import { RunFrame } from "../RunFrame/RunFrame"
-import { API_BASE } from "./api-base"
+import { getApiBase } from "./api-base"
 import { useRunFrameStore } from "./store"
 import { applyEditEventsToManualEditsFile } from "@tscircuit/core"
 import type { ManualEditsFile } from "@tscircuit/props"
@@ -163,7 +163,7 @@ export const RunFrameWithApi = (props: RunFrameWithApiProps) => {
       editEvents={editEventsForRender}
       onEditEvent={(ee) => {
         pushEditEvent(ee)
-        fetch(`${API_BASE}/events/create`, {
+        fetch(`${getApiBase()}/events/create`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -188,7 +188,7 @@ export const RunFrameWithApi = (props: RunFrameWithApiProps) => {
           manualEditsFile: updatedManualEdits,
         })
 
-        fetch(`${API_BASE}/files/upsert`, {
+        fetch(`${getApiBase()}/files/upsert`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

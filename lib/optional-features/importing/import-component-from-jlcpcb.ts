@@ -1,5 +1,5 @@
 import { fetchEasyEDAComponent, convertRawEasyToTsx } from "easyeda/browser"
-import { API_BASE } from "lib/components/RunFrameWithApi/api-base"
+import { getApiBase } from "lib/components/RunFrameWithApi/api-base"
 import ky from "ky"
 
 export const importComponentFromJlcpcb = async (
@@ -9,7 +9,7 @@ export const importComponentFromJlcpcb = async (
   const component = await fetchEasyEDAComponent(jlcpcbPartNumber, {
     // @ts-ignore
     fetch: (url, options: any) => {
-      return fetch(`${API_BASE}/proxy`, {
+      return fetch(`${getApiBase()}/proxy`, {
         ...options,
         headers: {
           ...options?.headers,
@@ -36,7 +36,7 @@ export const importComponentFromJlcpcb = async (
 
   const filePath = `imports/${fileName}.tsx`
 
-  await ky.post(`${API_BASE}/files/upsert`, {
+  await ky.post(`${getApiBase()}/files/upsert`, {
     json: {
       file_path: filePath,
       text_content: tsx,
