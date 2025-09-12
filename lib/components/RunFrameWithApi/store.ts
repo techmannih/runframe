@@ -4,7 +4,7 @@ import type { CircuitJson } from "circuit-json"
 import Debug from "lib/utils/debug"
 import { create } from "zustand"
 import { devtools } from "zustand/middleware"
-import { API_BASE } from "./api-base"
+import { getApiBase } from "./api-base"
 import type {
   File,
   FileContent,
@@ -20,7 +20,7 @@ async function upsertFileApi(
   path: FilePath,
   content: FileContent,
 ): Promise<File> {
-  const response = await fetch(`${API_BASE}/files/upsert`, {
+  const response = await fetch(`${getApiBase()}/files/upsert`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ file_path: path, text_content: content }),
@@ -31,7 +31,7 @@ async function upsertFileApi(
 
 async function getFileApi(path: FilePath): Promise<File> {
   const response = await fetch(
-    `${API_BASE}/files/get?file_path=${encodeURIComponent(path)}`,
+    `${getApiBase()}/files/get?file_path=${encodeURIComponent(path)}`,
   )
   const data = await response.json()
   return data.file
@@ -39,15 +39,15 @@ async function getFileApi(path: FilePath): Promise<File> {
 
 async function getEvents(since: string | null): Promise<FileUpdatedEvent[]> {
   const url = since
-    ? `${API_BASE}/events/list?since=${encodeURIComponent(since)}`
-    : `${API_BASE}/events/list`
+    ? `${getApiBase()}/events/list?since=${encodeURIComponent(since)}`
+    : `${getApiBase()}/events/list`
   const response = await fetch(url)
   const data = await response.json()
   return data.event_list
 }
 
 async function getInitialFilesApi(): Promise<Map<FilePath, FileContent>> {
-  const response = await fetch(`${API_BASE}/files/list`)
+  const response = await fetch(`${getApiBase()}/files/list`)
   const { file_list } = (await response.json()) as {
     file_list: Array<{ file_id: string; file_path: string }>
   }
